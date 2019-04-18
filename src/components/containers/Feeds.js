@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import actions from '../../actions';
-import {HTTPClient} from '../../utils/';
 
 class Feeds extends Component {
     constructor(props){
@@ -13,12 +12,31 @@ class Feeds extends Component {
                 url:''
             }
         };
+        this.fetchFeeds = this.fetchFeeds.bind(this);
     };
-
-    componentDidMount() {
+    fetchFeeds(){
         this.props.fetchFeeds(null)
         .then(data => {
             console.log(data)
+            return;
+        })
+        .catch(err => {
+            alert(err)
+        })
+    }
+
+    componentDidMount() {
+        this.fetchFeeds();
+    }
+
+
+    deleteFeed(feed, event){
+        event.preventDefault();
+        let entityId = feed.id.toString();
+        
+        this.props.deleteFeed(entityId)
+        .then(() => {
+            return this.fetchFeeds();
         })
         .catch(err => {
             alert(err)
@@ -58,8 +76,10 @@ class Feeds extends Component {
             <ul>
                 {feeds.map((feed, i) => {
                     const color = (feed == this.props.feed.selected) ? 'red' : '#333'
-                    return <li key = {feed.id}>
-                    <a style={{color:color}} onClick={this.selectFeed.bind(this, feed)} href="#">{feed.name}</a></li>
+                    return <li style={{display:'flex', justifyContent:'space-between'}} key = {feed.id}>
+                    <a style={{color:color}} onClick={this.selectFeed.bind(this, feed)} href="#">{feed.name}</a>
+                    <a className='glyphicon glyphicon-remove' onClick={this.deleteFeed.bind(this,feed)}>X</a>
+                    </li>
                 })}
             </ul>
         );
@@ -78,7 +98,8 @@ const dispatchToProps = (dispatch) => {
         fetchFeeds: (params) => dispatch(actions.fetchFeeds(params)),
         createFeed: (params) => dispatch(actions.createFeed(params)),
         selectFeed: (feed) => dispatch(actions.selectFeed(feed)),
-        fetchRssFeed: (url, params) => dispatch(actions.fetchRssFeed(url, params))
+        fetchRssFeed: (url, params) => dispatch(actions.fetchRssFeed(url, params)),
+        deleteFeed: (entityId) => dispatch(actions.deleteFeed(entityId))
     }
 }
 

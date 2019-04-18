@@ -1,45 +1,53 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Card from 'react-bootstrap';
 
 class Feed extends Component {
     render() {
         const selectedFeed = this.props.feed.selected;
+        let firstDesc = <div>
+            <h3>This is a Web App built with react-redux! Try to add a new feed on the sidebar:</h3><br/>
+            <h4>Feed Name:</h4> <p>Reddit-Programming</p>
+            <h4>Feed Url:</h4> <p>https://www.reddit.com/r/programming.rss</p>
+        </div>;
         
         let feedName = 'Welcome to NewsFeed';
+        let mainDesc = (selectedFeed) ? 'Here you will see the latest news from your favorite sites!' : firstDesc;
         let items = [];
 
         if(selectedFeed){
             name = selectedFeed.name;
             items = (this.props.rss[selectedFeed.url]) ? this.props.rss[selectedFeed.url] : [] ;
         };
-        //TODO: 1.Render every feed on cards, and open on modals.
-        //2. Remove a feed
+        //TODO: Remove a feed
         //contact email: dkwon@velocity360.io
         return (
             <div className="content">
                 <header>
                     <h1>{feedName}</h1>
                     <hr/>
-                    <p>A free and fully responsive site template</p>
+                    <p>{mainDesc}</p>
                 </header>
                 <ol>
                     {items.map((item,i) => {
                         return (
-                            <Card style={{ width: '18rem' }}>
-                                <Card.Body>
-                                    <Card.Title>Card Title</Card.Title>
-                                    <Card.Text>
-                                    Some quick example text to build on the card title and make up the bulk of
-                                    the card's content.
-                                    </Card.Text>
-                                </Card.Body>
-                            </Card>
+                            <li style={style.li}><a style={style.link} target="_blank" href={item.link}> {item.title} </a></li>      
                         );
                     })}
                 </ol>
             </div>
         );
+    }
+}
+
+const style = {
+    link:{
+        textDecoration: 'none',
+        border: 'none',
+        color:'blue',
+        fontSize:'larger'
+    },
+    li:{
+        marginBottom: '25px'
     }
 }
 

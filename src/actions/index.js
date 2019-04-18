@@ -4,6 +4,12 @@ import { TurboClient, HTTPClient } from '../utils'
 
 export default {
 	
+	deleteFeed: (entityId) => {
+		return dispatch => {
+			return dispatch(TurboClient.deleteRequest('feed', entityId, constants.FEED_DELETED));
+		}
+	},
+
 	fetchRssFeed: (url, params) => {
 		return dispatch => {
 			return dispatch(HTTPClient.getAsync(url, params, null, constants.RSS_FEED_RECIVED));

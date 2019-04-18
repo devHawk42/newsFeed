@@ -11,7 +11,7 @@ export default (state = initialState, action) => {
 	switch (action.type) {
 
         case constants.FEEDS_RECEIVED:
-            newState['all'] = action.data
+            newState['all'] = action.data;
             return newState;
             
         case constants.FEED_CREATED:

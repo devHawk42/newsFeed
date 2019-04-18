@@ -55,7 +55,7 @@ const putRequest = (resource, entity, params, actionType) => {
 }
 
 const deleteRequest = (resource, entity, actionType) => {
-	return dispatch => turbo({site_id:APP_ID}).remove(resource, entity)
+	return dispatch => turbo({site_id:APP_ID}).removeEntity(resource, entity)
 		.then(data => {
 			if (actionType != null){
 				dispatch({
